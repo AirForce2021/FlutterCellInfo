@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cell_info/CellResponse.dart';
+import 'package:cell_info/SIMInfoResponse.dart';
 import 'package:cell_info/cell_info.dart';
+import 'package:cell_info/models/common/cell_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -36,8 +38,8 @@ class _MyAppState extends State<MyApp> {
 
       cellsResponse = CellsResponse.fromJson(body);
 
-      CellType currentCellInFirstChip = cellsResponse.primaryCellList[1];
-      if (currentCellInFirstChip.type == "LTE") {
+      CellType currentCellInFirstChip = cellsResponse.primaryCellList[0];
+      if (currentCellInFirstChip.type == "LT  E") {
         currentDBM =
             "LTE dbm = " + currentCellInFirstChip.lte.signalLTE.dbm.toString();
       } else if (currentCellInFirstChip.type == "NR") {
@@ -49,6 +51,11 @@ class _MyAppState extends State<MyApp> {
 
         print('currentDBM = ' + currentDBM);
       }
+
+      String simInfo = await CellInfo.getSIMInfo;
+      final simJson = json.decode(simInfo);
+      print("desply name ${SIMInfoResponse.fromJson(simJson).simInfoList[0].displayName}");
+
     } on PlatformException {
       _cellsResponse = null;
     }
